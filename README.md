@@ -172,6 +172,8 @@ streamlit run app/dashboard.py
 
 Then open the local Streamlit URL, normally http://localhost:8501.
 
+Deployment - https://flockenergyassignment-zosym2vl7ey6md86ccwkqr.streamlit.app/
+
 Data Extraction Workflow
 
 Urja Portal
