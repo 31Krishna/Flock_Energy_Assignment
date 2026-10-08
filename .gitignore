@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 .streamlit/secrets.toml
 "@ | Set-Content .gitignore
+# Old nested project copy
+Flock_Energy_Assignment/

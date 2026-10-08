@@ -1,4 +1,5 @@
 import time
+
 import requests
 
 from app.config import BASE_URL, EMAIL, PASSWORD
@@ -24,8 +25,6 @@ class UrjaClient:
     # =========================
 
     def login(self):
-
-        # First load login page
         login_page = self.session.get(
             f"{self.base_url}/login",
             headers={
@@ -39,7 +38,6 @@ class UrjaClient:
 
         login_page.raise_for_status()
 
-        # Submit login form
         response = self.session.post(
             f"{self.base_url}/login",
             data={
@@ -48,17 +46,12 @@ class UrjaClient:
             },
             headers={
                 "Accept": "application/json",
-                "Content-Type": (
-                    "application/x-www-form-urlencoded"
-                ),
+                "Content-Type": "application/x-www-form-urlencoded",
                 "Origin": self.base_url,
                 "Referer": f"{self.base_url}/login",
             },
             timeout=15,
         )
-
-        print("Login status:", response.status_code)
-        print("Login response:", response.text)
 
         response.raise_for_status()
 
@@ -66,7 +59,7 @@ class UrjaClient:
 
         if result.get("status") != 303:
             raise RuntimeError(
-                f"Login failed: {result}"
+                "Urja portal authentication failed."
             )
 
         return result
@@ -82,22 +75,25 @@ class UrjaClient:
     # GENERIC GET WITH RETRY
     # =========================
 
-    def _get_with_retry(self, url, timeout=15):
-
+    def _get_with_retry(
+        self,
+        url,
+        params=None,
+        timeout=15,
+    ):
         max_attempts = 5
 
         for attempt in range(1, max_attempts + 1):
 
             response = self.session.get(
                 url,
+                params=params,
                 timeout=timeout,
             )
 
-            # Successful response
             if response.status_code != 429:
                 return response
 
-            # Rate limited
             if attempt < max_attempts:
 
                 retry_after = response.headers.get(
@@ -135,20 +131,10 @@ class UrjaClient:
             "page": page,
         }
 
-        response = self.session.get(
+        response = self._get_with_retry(
             url,
             params=params,
             timeout=15,
-        )
-
-        print(
-            f"Meter search page {page} status:",
-            response.status_code
-        )
-
-        print(
-            "Meter search response:",
-            response.text[:500]
         )
 
         response.raise_for_status()
@@ -168,11 +154,6 @@ class UrjaClient:
 
         response = self._get_with_retry(url)
 
-        print(
-            f"Geo status for {meter_id}:",
-            response.status_code
-        )
-
         response.raise_for_status()
 
         return response.json()
@@ -189,11 +170,6 @@ class UrjaClient:
         )
 
         response = self._get_with_retry(url)
-
-        print(
-            f"Energy status for {meter_id}:",
-            response.status_code
-        )
 
         response.raise_for_status()
 

@@ -1,30 +1,32 @@
-Urja Meter Analytics Dashboard
+# Urja Meter API
 
-A data analytics and visualization project built for the Flock Energy
-take-home assignment. The project extracts electricity meter data from
-the Urja operations portal, calculates energy consumption from
-cumulative meter readings, performs analysis, and presents the results
-through an interactive Streamlit dashboard.
+A clean FastAPI service built over the Urja Meter Ops portal for retrieving meter information, energy readings, calculated consumption, and meter location data.
 
-Project Overview
+The project was developed as part of the Flock Energy engineering take-home assignment.
 
-The goal of this project is to analyze electricity meter data and
-provide useful operational insights such as:
+---
 
-Total number of meters
+## 1. Overview
 
-Total energy consumption
+The Urja Meter API provides a simplified REST interface over the existing Urja Meter Ops portal.
 
-Consumption by installation status
+The service:
 
-Consumption by manufacturer
+- Authenticates with the Urja portal
+- Searches and lists meters
+- Retrieves meter energy readings
+- Calculates interval energy consumption
+- Retrieves meter geographical coordinates
+- Handles upstream rate limiting
+- Provides OpenAPI documentation through FastAPI
 
-Consumption by phase type
+The integration is read-only and does not modify data in the upstream portal.
 
-Daily energy consumption trends
+---
 
-Voltage statistics
+## 2. Architecture
 
+<<<<<<< HEAD
 Faulty meter analysis
 
 Highest and lowest consuming meters
@@ -267,3 +269,21 @@ Author
 Krishna Tiwari
 
 GitHub: https://github.com/31Krishna
+=======
+```text
+Client
+  |
+  v
+FastAPI
+  |
+  +----------------------+
+  |                      |
+  v                      v
+API Routes           Pydantic Models
+  |
+  v
+UrjaClient
+  |
+  v
+Urja Meter Ops Portal
+>>>>>>> 3d8aaca (Add FastAPI service for Urja meter data)
